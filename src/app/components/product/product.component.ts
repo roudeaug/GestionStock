@@ -9,7 +9,7 @@ import { Product } from 'src/app/models/product';
 })
 export class ProductComponent implements OnInit {
 
-  private products: Product[];
+  public products: Product[];
 
   /* Constructeur du composant */
   constructor(private productService: ProductMockService) {
@@ -18,7 +18,6 @@ export class ProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.products = this.productService.getProducts();
-    console.log(this.products);
   }
 
 }
