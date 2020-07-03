@@ -1,8 +1,72 @@
 <h3>Liste de produits</h3>
-<ul>
-    <li *ngFor="let product of products">
-        Référence: {{product.ref}},
-        Quantité: {{product.quantity}},
-        Prix Unitaire: {{product.unitPrice}}
-    </li>
-</ul>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-7">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Référence</th>
+                        <th>Quantité</th>
+                        <th>Prix Unitaire</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let product of products">
+                        <td>{{product.ref}}</td>
+                        <td>{{product.quantity}}</td>
+                        <td>{{product.unitPrice}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="col-sm-5">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    Ajouter un produit
+                </div>
+                <div class="card-body">
+                    <form [formGroup]="productForm">
+                        <div class="form-group">
+                            <!-- Référence -->
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroup-sizing-default">Référence *</span>
+                                </div>
+                                <!--formControlName permet de lier cet input avec l'attribut correspondant-->
+                                <input type="text" class="form-control" formControlName="ref">
+                            </div>
+                            <!-- Gestion de l'affichage d'erreur sur le champ obligatoire -->
+                            <div class="alert alert-danger" *ngIf="productForm.controls['ref'].invalid && 
+                                                                       (productForm.controls['ref'].touched || productForm.controls['ref'].dirty)">
+                                Ce champ est obligatoire
+                            </div>
+                            <!-- Quantité -->
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroup-sizing-default">Quantité</span>
+                                </div>
+                                <!--formControlName permet de lier cet input avec l'attribut correspondant-->
+                                <input type="number" class="form-control" formControlName="quantity">
+                            </div>
+                            <!-- Prix Unitaire -->
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text" id="inputGroup-sizing-default">Prix / u</span>
+                                </div>
+                                <!--formControlName permet de lier cet input avec l'attribut correspondant-->
+                                <input type="number" class="form-control" formControlName="unitPrice">
+                            </div>
+                            <button class="btn btn-success"
+                                    [disabled]="productForm.pristine || productForm.invalid"
+                                    (click)="addProduct()">
+                                    Ajouter</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
