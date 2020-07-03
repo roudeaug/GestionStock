@@ -8,6 +8,10 @@
                         <th>Référence</th>
                         <th>Quantité</th>
                         <th>Prix Unitaire</th>
+                        <th><button class="btn btn-outline-success"
+                                    (click)="action = 'add'; initProduct();">
+                            Ajouter</button>
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -15,6 +19,15 @@
                         <td>{{product.ref}}</td>
                         <td>{{product.quantity}}</td>
                         <td>{{product.unitPrice}}</td>
+                        <td>
+                            <button class="btn btn-outline-primary" 
+                                    style="margin-right: 5px;"
+                                    (click)="action = 'update'; currentProduct = product;">
+                                Modifier</button>
+                            <button class="btn btn-outline-danger"
+                                    (click)="action = 'delete'; currentProduct = product;">
+                                Supprimer</button>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -22,10 +35,13 @@
         <div class="col-sm-5">
             <div class="card">
                 <div class="card-header bg-info text-white">
-                    Ajouter un produit
+                    {{ action === 'add' ? 'Ajouter un produit' : 
+                       action === 'update' ? 'Modifier un produit' : 
+                       'Supprimer un produit'}}
                 </div>
                 <div class="card-body">
-                    <form [formGroup]="productForm">
+                    <!-- Formulaire de création et modification de produits -->
+                    <form [formGroup]="productForm" *ngIf="action === 'add' || action === 'update'">
                         <div class="form-group">
                             <!-- Référence -->
                             <div class="input-group mb-3">
@@ -33,7 +49,9 @@
                                   <span class="input-group-text" id="inputGroup-sizing-default">Référence *</span>
                                 </div>
                                 <!--formControlName permet de lier cet input avec l'attribut correspondant-->
-                                <input type="text" class="form-control" formControlName="ref">
+                                <input type="text" class="form-control" 
+                                       formControlName="ref"
+                                       [(ngModel)] = "currentProduct.ref">
                             </div>
                             <!-- Gestion de l'affichage d'erreur sur le champ obligatoire -->
                             <div class="alert alert-danger" *ngIf="productForm.controls['ref'].invalid && 
@@ -46,7 +64,9 @@
                                   <span class="input-group-text" id="inputGroup-sizing-default">Quantité</span>
                                 </div>
                                 <!--formControlName permet de lier cet input avec l'attribut correspondant-->
-                                <input type="number" class="form-control" formControlName="quantity">
+                                <input type="number" class="form-control"
+                                       formControlName="quantity"
+                                       [(ngModel)] = "currentProduct.quantity">
                             </div>
                             <!-- Prix Unitaire -->
                             <div class="input-group mb-3">
@@ -54,14 +74,30 @@
                                   <span class="input-group-text" id="inputGroup-sizing-default">Prix / u</span>
                                 </div>
                                 <!--formControlName permet de lier cet input avec l'attribut correspondant-->
-                                <input type="number" class="form-control" formControlName="unitPrice">
+                                <input type="number" class="form-control"
+                                       formControlName="unitPrice"
+                                       [(ngModel)] = "currentProduct.unitPrice">
                             </div>
-                            <button class="btn btn-success"
-                                    [disabled]="productForm.pristine || productForm.invalid"
+                            <button *ngIf="action === 'add'"
+                                    class="btn btn-success"
                                     (click)="addProduct()">
                                     Ajouter</button>
+                            <button *ngIf="action === 'update'"
+                                    class="btn btn-primary"
+                                    (click)="updateProduct()">
+                                    Modifier</button>
                         </div>
                     </form>
+                    <!-- Message de confirmation de suppression de produit -->
+                    <div *ngIf="action === 'delete'">
+                        Êtes-vous sûr de vouloir supprimer le produit <strong>{{currentProduct.ref}}</strong> définitivement ?
+                        <button class="btn btn-danger"
+                                style="margin-right: 5px; margin-top: 10px;"
+                                (click)="deleteProduct()">Supprimer</button>
+                        <button class="btn btn-primary"
+                                style="margin-top: 10px;"
+                                (click)="action = 'add'; initProduct();">Annuler</button>
+                    </div>
                 </div>
                 <div class="card-footer">
 

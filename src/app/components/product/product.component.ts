@@ -13,18 +13,35 @@ export class ProductComponent implements OnInit {
   products: Product[];
   productForm: FormGroup;
 
+  /* Type d'action a effectuer sur le produit */
+  action: string = 'add';
+
+  /* Produit courant */
+  currentProduct: Product;
+
   /* Constructeur du composant */
   constructor(private productService: ProductService, private fb: FormBuilder) {
-    //Formulaire de création de produit  
-    this.productForm = this.fb.group({
-        ref: ['', Validators.required],
-        quantity: '',
-        unitPrice: ''
-    });
+    this.createForm();
   }
 
   ngOnInit(): void {
+    this.initProduct()
     this.loadProducts();
+  }
+
+  /* Initialisation du produit courant */
+  initProduct() {
+    this.currentProduct = new Product();
+    this.createForm();
+  }
+
+  createForm() {
+    //Formulaire de création de produit  
+    this.productForm = this.fb.group({
+      ref: ['', Validators.required],
+      quantity: '',
+      unitPrice: ''
+  });
   }
 
   /* Chargement de la liste des produits depuis le serveur Spring Boot
@@ -42,6 +59,27 @@ export class ProductComponent implements OnInit {
     const product: Product = this.productForm.value;
     this.productService.addProduct(product).subscribe(
       res => {
+        this.initProduct();
+        this.loadProducts();
+      }
+    );
+  }
+
+  /* Modification d'un produit depuis le formulaire dans la liste des produits du serveur */
+  updateProduct() {
+    this.productService.updateProduct(this.currentProduct).subscribe(
+      res => {
+        this.currentProduct = new Product();
+        this.loadProducts();
+      }
+    );
+  }
+
+  /* Suppression d'un produit depuis le formulaire dans la liste des produits du serveur */
+  deleteProduct() {
+    this.productService.deleteProduct(this.currentProduct.ref).subscribe(
+      res => {
+        this.currentProduct = new Product();
         this.loadProducts();
       }
     );
