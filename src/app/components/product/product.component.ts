@@ -25,6 +25,7 @@ export class ProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('Test');
     this.initProduct()
     this.loadProducts();
   }
@@ -77,7 +78,7 @@ export class ProductComponent implements OnInit {
 
   /* Suppression d'un produit depuis le formulaire dans la liste des produits du serveur */
   deleteProduct() {
-    this.productService.deleteProduct(this.currentProduct.ref).subscribe(
+    this.productService.deleteProduct(this.currentProduct.id).subscribe(
       res => {
         this.currentProduct = new Product();
         this.loadProducts();

@@ -11,9 +11,9 @@ export class ProductMockService {
 
   /* Constructeur du service */
   constructor() {
-    let p1: Product = new Product('Livre', 50, 20);
-    let p2: Product = new Product('Cahier', 200, 5.25);
-    let p3: Product = new Product('Test', 500, 2.10);
+    let p1: Product = new Product(1,'Livre', 50, 20);
+    let p2: Product = new Product(2,'Cahier', 200, 5.25);
+    let p3: Product = new Product(3,'Test', 500, 2.10);
     this.PRODUCTS.push(p1,p2,p3);
   }
 
